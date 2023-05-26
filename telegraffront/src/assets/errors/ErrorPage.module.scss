@@ -1,0 +1,19 @@
+.page {
+  padding: 1rem;
+}
+
+.error {
+  padding: 5px;
+  border-left: 4px solid red;
+  background: rgba(0,0,0,.1);
+  border-radius: 0 5px 5px 0;
+  font-size: 1.5rem;
+}
+
+.description {
+  padding: 5px;
+  border-left: 4px solid deepskyblue;
+  background: rgba(0,0,0,.1);
+  border-radius: 0 5px 5px 0;
+  font-size: 1.5rem;
+}

@@ -1,0 +1,9 @@
+/telegrafback/node_modules/
+/telegrafback/yarn-error.log
+/telegrafback/yarn.lock
+
+/telegraffront/node_modules/
+/telegraffront/yarn-error.log
+/telegraffront/yarn.lock
+
+/database.db
