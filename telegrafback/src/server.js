@@ -27,6 +27,35 @@ const min_password_len = 8;
 // Создаем таблицу пользователей в базе данных
 dbRun('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, email TEXT UNIQUE, password TEXT, refreshToken TEXT, role TEXT)');
 
+// Middlewares
+
+const authMiddleware = async (req, res, next) => {
+    const token = req.headers.authorization;
+
+    if (!token) {
+        return res.status(401).json({ ok: false });
+    }
+
+    const formatted_token = token.split(' ')[1];
+
+
+    try {
+        const decodedToken = await jwt.verify(formatted_token, accessTokenSecret);
+
+        if (decodedToken.exp < (Date.now() / 1000)) {
+            return res.status(401).json({ ok: false });
+        }
+
+        req.user = decodedToken; // Добавляем информацию о пользователе в объект запроса
+        next();
+
+    } catch (error) {
+        return res.status(401).json({ ok: false });
+    }
+};
+
+// End Middlewares
+
 // Регистрация пользователя
 app.post('/register', async (req, res) => {
     const { username = '', password = '', email = '' } = req.body;
@@ -126,17 +155,26 @@ app.post('/refresh', async (req, res) => {
     }
 });
 
+app.get('/me', authMiddleware, async (req, res) => {
+    try {
+        const user = await dbGet('SELECT * FROM users WHERE id = ?', req.user.userId);
+
+        res.status(200).json({ok: true, user});
+
+    } catch (error) {
+        res.status(404).json({ok: false, error: `Пользователь с id ${req.user.id} не найден.`});
+    }
+})
+
 // Разавторизация
-app.post('/logout', async (req, res) => {
+app.post('/logout', authMiddleware, async (req, res) => {
     const { refreshToken } = req.body;
 
     try {
-        // Удаляем рефреш-токен из базы данных
         await dbRun('UPDATE users SET refreshToken = NULL WHERE refreshToken = ?', refreshToken);
 
         res.json({ ok: true });
     } catch (error) {
-        console.error('Error logging out:', error);
         res.status(500).json({ ok: false });
     }
 });

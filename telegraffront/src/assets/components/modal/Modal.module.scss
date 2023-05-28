@@ -1,0 +1,33 @@
+@import "../../../index";
+
+.blur {
+  z-index: 999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(15px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  overflow: hidden;
+
+  .close_icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: clamp(15px, 10vmin, 50px);
+    height: clamp(15px, 10vmin, 50px);
+    cursor: pointer;
+    background-image: $close-icon-url;
+    background-size: cover;
+  }
+
+  .content {
+    text-align: center;
+  }
+
+}

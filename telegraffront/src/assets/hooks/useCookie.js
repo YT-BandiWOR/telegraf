@@ -1,5 +1,8 @@
+import useJWT from "./useJWT";
+
+
 const useCookie = () => {
-    const setCookie = (name, value, expiration) => {
+    const set = (name, value, expiration) => {
         let cookieString = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
 
         if (expiration) {
@@ -11,16 +14,20 @@ const useCookie = () => {
         document.cookie = cookieString;
     };
 
-    const setJWTTokenCookie = (name, value) => {
+    const setToken = (name, value) => {
         const expTime = useJWT().getJwtTokenLifetime(value);
-        setCookie(name, value, expTime);
-    }
+        set(name, value, expTime);
+    };
 
-    const getCookie = (name) => {
+    const get = (name) => {
         const cookiePairs = document.cookie.split(';');
 
         for (let i = 0; i < cookiePairs.length; i++) {
             const [cookieName, cookieValue] = cookiePairs[i].split('=');
+
+            if (!cookieValue || !cookieName) {
+                continue;
+            }
 
             if (decodeURIComponent(cookieName.trim()) === name) {
                 return decodeURIComponent(cookieValue.trim());
@@ -30,15 +37,20 @@ const useCookie = () => {
         return undefined;
     };
 
-    const removeCookie = (name) => {
-        setCookie(name, '', -1);
+    const has = (name) => {
+        return !!(get(name));
+    }
+
+    const remove = (name) => {
+        set(name, '', -1);
     };
 
     return {
-        setCookie,
-        setJWTTokenCookie,
-        getCookie,
-        removeCookie,
+        set,
+        get,
+        has,
+        setToken,
+        remove,
     };
 };
 

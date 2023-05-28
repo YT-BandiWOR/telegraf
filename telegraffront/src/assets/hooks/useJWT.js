@@ -19,3 +19,5 @@ const useJWT = () => {
         getJwtTokenLifetime
     }
 }
+
+export default useJWT;

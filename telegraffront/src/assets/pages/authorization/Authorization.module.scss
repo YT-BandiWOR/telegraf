@@ -1,8 +1,8 @@
 @import "../../../index";
 
+
 .auth_page {
   align-items: center;
-
   .auth_form {
     width: clamp(300px, 75%, 600px);
     display: flex;
@@ -19,6 +19,59 @@
       margin-bottom: 2vh;
     }
 
+    .buttons {
+      margin-top: 2vh;
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+
+      .switch_auth_type {
+        outline: none;
+        text-decoration: none;
+        cursor: pointer;
+        width: clamp(150px, 40%, 250px);
+        color: rgba(0,0,0,.8);
+        border: 2px solid rgba(0,0,0,.6);
+        text-align: center;
+        border-radius: 50px;
+        padding: 3px;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        font-size: 1.2rem;
+
+        &:hover {
+          background: rgba(0,0,0,.6);
+          color: white;
+          border-color: rgba(0,0,0,.6);
+        }
+      }
+
+      .submit_button {
+        cursor: pointer;
+        width: clamp(150px, 40%, 250px);
+        align-self: end;
+        background: rgba(0,0,0,.6);
+        border: none;
+        padding: 5px;
+        color: white;
+        border-radius: 50px;
+        font-size: 1.2rem;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+
+        &:hover {
+          background: rgba(0,0,0,.5);
+        }
+
+        &:active {
+          box-shadow: inset 2px 2px 3px rgba(255,255,255,.2);
+          background: rgba(0,0,0,.55);
+        }
+      }
+    }
+
+
+
     .input_field {
       padding: 10px;
       border-radius: 15px;
@@ -34,28 +87,6 @@
         box-shadow: none;
       }
     }
-
-    .submit_button {
-      cursor: pointer;
-      width: clamp(150px, 40%, 250px);
-      align-self: end;
-      background: rgba(0,0,0,.6);
-      border: none;
-      padding: 5px;
-      color: white;
-      border-radius: 15px;
-      font-size: 1.2rem;
-      box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
-
-      &:hover {
-        background: rgba(0,0,0,.5);
-      }
-
-      &:active {
-        box-shadow: inset 2px 2px 3px rgba(255,255,255,.2);
-        background: rgba(0,0,0,.55);
-      }
-    }
   }
 
   .error_container {
@@ -65,5 +96,35 @@
     border: 1px solid rgba(0,0,0,.25);
     border-radius: 10px;
     box-shadow: 2px 2px 15px rgba(0,0,0,.2);
+  }
+
+  .loading_bar {
+    min-width: 90%;
+    min-height: 4px;
+    background: rgba(0, 0, 0, 0.5);
+    align-self: center;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .loading_bar:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background: #fff;
+    animation: running-bar 2s infinite linear;
+  }
+
+  @keyframes running-bar {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
   }
 }
