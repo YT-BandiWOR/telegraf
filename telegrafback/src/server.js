@@ -7,6 +7,11 @@ const bcrypt = require('bcrypt');
 const validator = require('validator');
 const roles = require("./roles");
 
+const args = process.argv.slice(2);
+
+const host = args[0] || 'localhost';
+const port = args[1] || 3000;
+
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -179,6 +184,6 @@ app.post('/logout', authMiddleware, async (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+app.listen(port, host, () => {
+    console.log(`Server is running on ${host}:${port}`);
 });

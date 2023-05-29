@@ -7,19 +7,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 5px 5px rgba(0,0,0,.25);
-  flex-wrap: wrap;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, .25);
   gap: 10px;
 
   .logo {
     text-decoration: none;
     display: flex;
-    background: rgba(0,0,0,.1);
+    background: rgba(0, 0, 0, .1);
     padding: 5px;
     align-items: center;
     gap: 5px;
     border-radius: 10px;
-    box-shadow: 2px 2px 4px rgba(255,255,255,.2), -2px -2px 4px rgba(255,255,255,.2),;
+    box-shadow: 2px 2px 4px rgba(255, 255, 255, .2), -2px -2px 4px rgba(255, 255, 255, .2),;
 
     .logo_icon {
       width: 2.5rem;
@@ -27,6 +26,7 @@
       background-image: $telegram-icon-url;
       background-size: cover;
     }
+
     .logo_name {
       font-weight: bolder;
       color: white;
@@ -35,19 +35,82 @@
     }
   }
 
+  .open_links {
+    display: none;
+  }
+
   .links {
-    display: flex;
-    gap: 15px;
+    @media screen and (min-width: 600px) {
+      display: flex;
+      gap: 15px;
+      align-items: center;
 
-    & > a {
-      text-decoration: none;
-      color: white;
-      font-size: 1.3rem;
-      border-bottom: 2px solid transparent;
+      & > a {
+        text-decoration: none;
+        color: white;
+        font-size: 1.3rem;
+        border-bottom: 2px solid transparent;
 
-      &:hover {
-        border-bottom: 2px solid white;
+        &:hover {
+          border-bottom: 2px solid white;
+        }
+      }
+
+      & > button {
+        display: none;
       }
     }
   }
+
+  @media screen and (max-width: 600px) {
+    .links {
+      z-index: 999;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      padding: 10px;
+      background-color: rgba(0,0,0,.5);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      text-align: center;
+      gap: 10px;
+
+      & > a {
+        text-decoration: none;
+        color: white;
+        background: black;
+        border-radius: 10px;
+        padding: 5px;
+        font-size: 1.2rem;
+        box-shadow: 2px 2px 2px rgba(0,0,0,.2);
+
+        &:hover {
+
+        }
+      }
+
+      & > button {
+        border-radius: 10px;
+        border: none;
+        padding: 5px;
+        font-size: 1.2rem;
+        box-shadow: 2px 2px 2px rgba(0,0,0,.2);
+      }
+    }
+
+    .open_links {
+      width: 2.5rem;
+      height: 2.5rem;
+      background-image: $burger-menu-icon-url;
+      background-repeat: no-repeat;
+      background-size: cover;
+      cursor: pointer;
+      display: block;
+    }
+  }
+
 }

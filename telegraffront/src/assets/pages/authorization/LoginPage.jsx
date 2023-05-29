@@ -1,21 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import cls from "./Authorization.module.scss";
-import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
 import FullscreenModal from "../../components/modal/FullscreenModal.jsx";
-import useCookie from "../../hooks/useCookie.js";
-import useStorage from "../../hooks/useStorage.js";
-import telegrafAPI from "../../api/telegrafAPI.js";
+import cookie from "../../hooks/cookie.ts";
+import storage from "../../hooks/storage.ts";
+import telegrafAPI from "../../api/telegrafAPI.ts";
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
-    const navigate = useNavigate();
 
     useEffect(() => {
-        const reg_data = useStorage(sessionStorage).pop('reg_data');
+        const reg_data = storage(sessionStorage).pop('reg_data');
 
         if (reg_data && reg_data.username && reg_data.password) {
             setUsername(reg_data.username);
@@ -28,15 +26,15 @@ const LoginPage = () => {
         setLoading(true);
 
         try {
-            const response = await telegrafAPI('http://localhost:3000').login(username, password);
-            useCookie().setToken('access_token', response.token);
-            useStorage().setToken('refresh_token', response.refreshToken);
+            const response = await telegrafAPI().login(username, password);
+            cookie().setToken('access_token', response.data.token);
+            storage().setToken('refresh_token', response.data.refreshToken);
 
             location.replace(location.origin + '/');
 
         } catch (error) {
             console.log(error);
-            setError(error.data.error);
+            setError(error.data);
         }
 
         setLoading(false);

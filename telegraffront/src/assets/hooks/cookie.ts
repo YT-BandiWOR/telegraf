@@ -1,9 +1,9 @@
-import useJWT from "./useJWT";
+import JWT from "./JWT";
 
 
-const useCookie = () => {
-    const set = (name, value, expiration) => {
-        let cookieString = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
+const cookie = () => {
+    const set = (name: string, value: string, expiration: number) => {
+        let cookieString: string = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
 
         if (expiration) {
             const expirationDate = new Date();
@@ -14,13 +14,13 @@ const useCookie = () => {
         document.cookie = cookieString;
     };
 
-    const setToken = (name, value) => {
-        const expTime = useJWT().getJwtTokenLifetime(value);
+    const setToken = (name: string, value: string) => {
+        const expTime = JWT().getJwtTokenLifetime(value);
         set(name, value, expTime);
     };
 
-    const get = (name) => {
-        const cookiePairs = document.cookie.split(';');
+    const get = (name: string): string | undefined => {
+        const cookiePairs: string[] = document.cookie.split(';');
 
         for (let i = 0; i < cookiePairs.length; i++) {
             const [cookieName, cookieValue] = cookiePairs[i].split('=');
@@ -37,11 +37,11 @@ const useCookie = () => {
         return undefined;
     };
 
-    const has = (name) => {
+    const has = (name: string) => {
         return !!(get(name));
     }
 
-    const remove = (name) => {
+    const remove = (name: string) => {
         set(name, '', -1);
     };
 
@@ -54,4 +54,4 @@ const useCookie = () => {
     };
 };
 
-export default useCookie;
+export default cookie;

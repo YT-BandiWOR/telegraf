@@ -3,9 +3,9 @@ import cls from "./Authorization.module.scss";
 import axios from 'axios';
 import {Link, useNavigate} from "react-router-dom";
 import FullscreenModal from "../../components/modal/FullscreenModal.jsx";
-import afterAuthRedirectUrl from "../../utils/afterAuthRedirectUrl.js";
-import useStorage from "../../hooks/useStorage.js";
-import telegrafAPI from "../../api/telegrafAPI.js";
+import afterAuthRedirectUrl from "../../utils/afterAuthRedirectUrl.ts";
+import useStorage from "../../hooks/storage.ts";
+import telegrafAPI from "../../api/telegrafAPI.ts";
 
 const RegistrationPage = () => {
     const [username, setUsername] = useState('');
@@ -27,7 +27,7 @@ const RegistrationPage = () => {
         setLoading(true);
 
         try {
-            await telegrafAPI('http://localhost:3000').register(username, email, password);
+            await telegrafAPI().register(username, email, password);
 
             useStorage(sessionStorage).set('reg_data', {username, password});
             navigate('/login');

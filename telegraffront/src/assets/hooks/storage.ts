@@ -1,7 +1,7 @@
-import useJWT from "./useJWT.js";
+import JWT from "./JWT";
 
-const useStorage = (storage = localStorage) => {
-    const set = (key, value, expiration = null) => {
+const storage = (storage: Storage = localStorage) => {
+    const set = (key: string, value: any, expiration: number | null = null) => {
         const data = {
             value: value,
             expiration: expiration ? new Date().getTime() + expiration * 1000 : null
@@ -9,13 +9,16 @@ const useStorage = (storage = localStorage) => {
         storage.setItem(key, JSON.stringify(data));
     };
 
-    const setToken = (key, value) => {
-        set(key, value, useJWT().getJwtTokenLifetime(value));
+    const setToken = (key: string, value: string) => {
+        set(key, value, JWT().getJwtTokenLifetime(value));
     }
 
-    const get = (key) => {
+    const get = (key: string): any | undefined => {
+        if (!key) return undefined;
+
         try {
-            const data = JSON.parse(storage.getItem(key));
+            const item = storage.getItem(key);
+            const data: { value: any; expiration: number | null } | null = item !== null ? JSON.parse(item) : null;
 
             if (data && (!data.expiration || data.expiration >= new Date().getTime())) {
                 return data.value;
@@ -27,13 +30,13 @@ const useStorage = (storage = localStorage) => {
         return undefined;
     };
 
-    const pop = (key) => {
+    const pop = (key: string): any => {
         const value = get(key);
         remove(key);
         return value;
     }
 
-    const remove = (key) => {
+    const remove = (key: string) => {
         storage.removeItem(key);
     };
 
@@ -46,4 +49,4 @@ const useStorage = (storage = localStorage) => {
     };
 };
 
-export default useStorage;
+export default storage;
