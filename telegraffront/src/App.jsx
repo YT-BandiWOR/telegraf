@@ -7,6 +7,8 @@ import NotFound from "./assets/errors/NotFound.jsx";
 import LoginPage from "./assets/pages/authorization/LoginPage.jsx";
 import RegistrationPage from "./assets/pages/authorization/RegistrationPage.jsx";
 import telegrafAPI from "./assets/api/telegrafAPI.ts";
+import AccountPage from "./assets/pages/authorization/AccountPage.jsx";
+import MainPage from "./assets/pages/main/MainPage.jsx";
 
 const App = () => {
     const [account, setAccount] = useState(null);
@@ -29,13 +31,13 @@ const App = () => {
                 <Header account={account}/>
                 <div>
                     <Routes>
-                        <Route path={'/'} element={<main>Content</main>}/>
+                        <Route path={'/'} element={<MainPage account={account}/>}/>
                         <Route path={'/login'} element={<LoginPage/>}/>
                         <Route path={'/register'} element={<RegistrationPage/>}/>
+                        <Route path={'/account'} element={<AccountPage account={account}/>}/>
                         <Route path={'*'} element={<NotFound/>}/>
                     </Routes>
                 </div>
-
             </div>
             <Footer/>
         </div>

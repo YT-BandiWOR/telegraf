@@ -21,23 +21,29 @@ const LoginPage = () => {
         }
     }, [])
 
-    const onFormSubmit = async (ev) => {
+    const onFormSubmit = (ev) => {
         ev.preventDefault();
         setLoading(true);
 
-        try {
-            const response = await telegrafAPI().login(username, password);
-            cookie().setToken('access_token', response.data.token);
-            storage().setToken('refresh_token', response.data.refreshToken);
+        const loginRequest = async () => {
+            try {
+                const response = await telegrafAPI().login(username, password);
+                console.log('res', response.data)
 
-            location.replace(location.origin + '/');
+                cookie().setToken('access_token', response.data.token);
+                storage().setToken('refresh_token', response.data.refreshToken);
 
-        } catch (error) {
-            console.log(error);
-            setError(error.data);
+                location.replace(location.origin + '/');
+
+            } catch (error) {
+                console.error(error);
+                setError(error?.data);
+            }
+
+            setLoading(false);
         }
 
-        setLoading(false);
+        loginRequest();
     }
 
     return (

@@ -16,7 +16,7 @@ const RegistrationPage = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    const onFormSubmit = async (ev) => {
+    const onFormSubmit = (ev) => {
         ev.preventDefault();
 
         if (password !== repeatPassword) {
@@ -26,16 +26,23 @@ const RegistrationPage = () => {
 
         setLoading(true);
 
-        try {
-            await telegrafAPI().register(username, email, password);
+        const registerRequest = async () => {
+            try {
+                await telegrafAPI().register(username, email, password);
 
-            useStorage(sessionStorage).set('reg_data', {username, password});
-            navigate('/login');
+                useStorage(sessionStorage).set('reg_data', {username, password});
+                setLoading(false);
 
-        } catch (error) {
-            setLoading(false);
-            setError(error.data);
+                navigate('/login');
+
+            } catch (error) {
+                setLoading(false);
+                setError(error.data);
+                console.error(error);
+            }
         }
+
+        registerRequest();
     };
 
     return (

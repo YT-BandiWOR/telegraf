@@ -1,4 +1,4 @@
-const originUrl: string = 'http://192.168.1.202:32346'
+const originUrl: string = 'http://localhost:3000'
 
 export default {
     originUrl

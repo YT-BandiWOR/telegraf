@@ -10,6 +10,7 @@ const login_url = '/login';
 const refresh_url = '/refresh';
 const me_url = '/me';
 const logout_url = '/logout';
+const delete_account_url = '/deleteAccount';
 
 class Response {
     data: Record<string, any>;
@@ -37,6 +38,7 @@ interface TelegrafAPI {
     refresh: (refreshToken: string) => Promise<Response>;
     me: () => Promise<Response>;
     logout: () => Promise<Response>;
+    deleteAccount: (confirmPassword: string) => Promise<Response>;
 }
 
 const telegrafAPI = (origin = apiConstants.originUrl): TelegrafAPI => {
@@ -45,11 +47,13 @@ const telegrafAPI = (origin = apiConstants.originUrl): TelegrafAPI => {
         const storageTool = storage(localStorage);
         let token = cookieTool.get('access_token');
         let refreshToken = storageTool.get('refresh_token');
+
         if (!token && refreshToken) {
             let response: Response;
 
             try {
                 response = await refresh(refreshToken);
+
             } catch (error: AxiosError) {
                 storageTool.remove('refresh_token');
                 cookieTool.remove('access_token');
@@ -118,6 +122,7 @@ const telegrafAPI = (origin = apiConstants.originUrl): TelegrafAPI => {
                 method: 'GET',
                 token
             }));
+
             return new Response(response.data, response.status);
         } catch (error: AxiosError | Error) {
             if (error instanceof Error) {
@@ -137,7 +142,7 @@ const telegrafAPI = (origin = apiConstants.originUrl): TelegrafAPI => {
 
             const response: AxiosResponse<any> = await axios.request(createAxiosContext({
                 url: origin + logout_url,
-                method: 'GET',
+                method: 'POST',
                 token,
                 body: {
                     refreshToken
@@ -154,12 +159,41 @@ const telegrafAPI = (origin = apiConstants.originUrl): TelegrafAPI => {
         }
     };
 
+    const deleteAccount = async (confirmPassword: string): Promise<Response> => {
+        try {
+            await tryUpdateToken();
+            const token = cookie().get('access_token');
+            const refreshToken = storage(localStorage).get('refresh_token');
+
+            const response: AxiosResponse<any> = await axios.request(createAxiosContext({
+                url: origin + delete_account_url,
+                method: 'POST',
+                token,
+                body: {
+                    refreshToken,
+                    password: confirmPassword
+                }
+            }));
+
+            return new Response(response.data, response.status);
+
+        } catch (error: AxiosError | Error) {
+            if (error instanceof Error) {
+                throw error;
+            } else if (error instanceof AxiosError) {
+                throw new Error(error.status, error.response.data);
+            }
+            throw error;
+        }
+    }
+
     return {
         login,
         register,
         refresh,
         me,
-        logout
+        logout,
+        deleteAccount
     };
 };
 
